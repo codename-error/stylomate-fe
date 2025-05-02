@@ -61,7 +61,7 @@ class CollectionContentState extends State<CollectionContent>
       ),
       FloatingAddButton(
         onTap: () {
-          Navigator.pushNamed(context, '/wardrobe/add');
+          Navigator.pushNamed(context, '/add-wardrobe');
         },
       ),
     ]);

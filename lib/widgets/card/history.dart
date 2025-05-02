@@ -52,6 +52,7 @@ class HistoryCard extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     serviceTitle,
