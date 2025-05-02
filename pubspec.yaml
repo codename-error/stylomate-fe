@@ -1,0 +1,73 @@
+name: stylomate
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.19.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+  fonts:
+    - family: Stylomateicon
+      fonts:
+        - asset: assets/fonts/Stylomateicon.ttf
+    - family: Serotiva
+      fonts:
+        - asset: assets/fonts/Serotiva-Regular.ttf
+          weight: 400
+          style: normal
+        - asset: assets/fonts/Serotiva-Bold.ttf
+          weight: 700
+          style: normal
+        - asset: assets/fonts/Serotiva-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/Serotiva-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Serotiva-Light.ttf
+          weight: 300
+          style: normal
+        - asset: assets/fonts/Serotiva-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/Serotiva-Black.ttf
+          weight: 900
+          style: normal
+        - asset: assets/fonts/Serotiva-BlackItalic.ttf  
+          weight: 900
+          style: italic
+        - asset: assets/fonts/Serotiva-Medium.ttf
+          weight: 500
+          style: normal
+        - asset: assets/fonts/Serotiva-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/Serotiva-SemiBold.ttf
+          weight: 600
+          style: normal
+        - asset: assets/fonts/Serotiva-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/Serotiva-ExtraBold.ttf
+          weight: 800
+          style: normal
+        - asset: assets/fonts/Serotiva-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+
+module:
+  androidX: true
