@@ -265,10 +265,14 @@ class ScanWardrobeScreenState extends State<ScanWardrobeScreen> {
     if (!_isCameraInitialized) return;
 
     try {
+      final BuildContext currentContext = context;
       final XFile photo = await _controller!.takePicture();
-      // Here you would handle the captured image
       print('Photo captured: ${photo.path}');
-      // Navigate to next screen or show preview
+      if (!mounted) return;
+      Navigator.pushNamed(currentContext, '/preview-wardrobe', arguments: {
+        'imagePath': photo.path,
+        'category': _selectedCategory == 0 ? 'top' : 'bottom',
+      });
     } catch (e) {
       print('Error taking photo: $e');
     }
