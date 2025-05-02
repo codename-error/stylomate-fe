@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stylomate/models/test.dart';
+import 'package:stylomate/services/test.dart';
+import 'package:stylomate/services/wardrobe.dart';
 import 'package:stylomate/themes/custom_colors.dart';
 import 'package:stylomate/themes/custom_text_styles.dart';
 import 'package:stylomate/themes/custom_icons.dart';
@@ -13,6 +14,7 @@ class SettingScreen extends StatefulWidget {
 
 class SettingScreenState extends State<SettingScreen> {
   final TestService _service = TestService.create();
+  final WardrobeService _wardrobeService = WardrobeService.create();
   String _responseText = "Loading...";
   bool _isLoading = true;
 
@@ -25,10 +27,11 @@ class SettingScreenState extends State<SettingScreen> {
   Future<void> _initializeData() async {
     try {
       final response = await _service.getPing();
+      final wardrobeResponse = await _wardrobeService.getWardrobes();
       setState(() {
-        _responseText = response.isSuccessful 
-            ? "Ping successful: ${response.body}"
-            : "Error: ${response.error} (${response.statusCode})";
+        _responseText = response.isSuccessful && wardrobeResponse.isSuccessful
+            ? "Ping successful: ${response.body} and ${wardrobeResponse.body}"
+            : "Error: ${response.error} (${response.statusCode}) and ${wardrobeResponse.error} (${wardrobeResponse.headers})";
         _isLoading = false;
       });
     } catch (e) {

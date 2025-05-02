@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:stylomate/services/base_network.dart';
 
 part 'test.chopper.dart';
 
@@ -6,7 +7,7 @@ part 'test.chopper.dart';
 abstract class TestService extends ChopperService {
   static TestService create([ChopperClient? client]) {
     final newClient = client ?? ChopperClient(
-      baseUrl: Uri.parse('https://a977-202-158-77-58.ngrok-free.app/v2'),
+      baseUrl: Uri.parse(BaseNetwork.baseUrl),
       services: [_$TestService()],
       converter: JsonConverter(),
       interceptors: [HttpLoggingInterceptor()],
