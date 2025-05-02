@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stylomate/themes/custom_colors.dart';
-import 'package:stylomate/widgets/card/wardrobe_type.dart';
+import 'package:stylomate/widgets/card/history_type.dart';
+import 'package:stylomate/widgets/card/history.dart';
 
 
 class HistoryContent extends StatefulWidget {
@@ -12,51 +13,31 @@ class HistoryContent extends StatefulWidget {
 
 class HistoryContentState extends State<HistoryContent>
     with SingleTickerProviderStateMixin {
-  final List<WardrobeType> wardrobes = [
-    WardrobeType(
-      imageUrl: 'assets/images/apparel-1.png',
-    ),
-    WardrobeType(
-      imageUrl: 'assets/images/apparel-2.png',
-    ),
-    WardrobeType(
-      imageUrl: 'assets/images/apparel-3.png',
-    ),
-    WardrobeType(
-      imageUrl: 'assets/images/apparel-4.png',
-    ),
-    WardrobeType(
-      imageUrl: 'assets/images/apparel-1.png',
-    ),
-    WardrobeType(
-      imageUrl: 'assets/images/apparel-2.png',
-    ),
+  final List<HistoryType> histories = [
+    HistoryType(date: DateTime(2025, 05, 1), serviceTitle: 'Stylo AI', tokenActivity: 5, isDecreased: true),
+    HistoryType(date: DateTime(2025, 05, 1), serviceTitle: 'Style me', tokenActivity: 5, isDecreased: true),
+    HistoryType(date: DateTime(2025, 05, 1), serviceTitle: 'Share', tokenActivity: 5, isDecreased: false),
   ];
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16.0,
-            mainAxisSpacing: 16.0,
-            childAspectRatio: 1.0,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: histories.length,
+            itemBuilder: (context, index) {
+              return HistoryCard(
+                serviceTitle: histories[index].serviceTitle,
+                tokenActivity: histories[index].tokenActivity,
+                date: histories[index].date,
+                isDecreased: histories[index].isDecreased,
+              );
+            },
           ),
-          itemCount: wardrobes.length,
-          itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                color: CustomColors.secondary200,
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
-                child: Image.asset(
-                  wardrobes[index].imageUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
-          },
-        );
+        ],
+      ),
+    );
   }
 }
