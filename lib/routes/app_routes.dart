@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stylomate/views/wardrobe/scan_wardrobe_screen.dart';
 import 'package:stylomate/views/settings/setting_screen.dart';
 import 'package:stylomate/views/wardrobe/add_wardrobe_screen.dart';
 import './name_routes.dart';
@@ -11,5 +12,6 @@ class AppRoutes {
     RouteNames.profile: (context) => ProfileScreen(),
     RouteNames.addWardrobe: (context) => AddWardrobeScreen(),
     RouteNames.settings: (context) => SettingScreen(),
+    RouteNames.scanWardrobe: (context) => ScanWardrobeScreen(),
   };
 }

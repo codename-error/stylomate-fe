@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stylomate/models/test.dart';
 import 'package:stylomate/themes/custom_colors.dart';
 import 'package:stylomate/themes/custom_text_styles.dart';
 import 'package:stylomate/themes/custom_icons.dart';
@@ -42,74 +41,89 @@ class AddWardrobeScreenState extends State<AddWardrobeScreen> {
           leadingWidth: 200,
         ),
         backgroundColor: CustomColors.secondary50,
-        body: Column(
+        body: Stack(
           children: [
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-                child: Column(
+            Column(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 24),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Add your clothes to the wardrobe',
+                          style: CustomTextStyles.bold3xl.copyWith(
+                            color: CustomColors.secondary600,
+                          ),
+                        ),
+                        Text(
+                          'Place your clothing within the marks provided. Make sure the item is fully visible, unfolded, and clearly captured.',
+                          style: CustomTextStyles.regularSm.copyWith(
+                            color: CustomColors.secondary400,
+                          ),
+                        ),
+                      ],
+                    )),
+                Center(
+                  child: Column(
                   children: [
-                    Text(
-                      'Add your clothes to the wardrobe',
-                      style: CustomTextStyles.bold3xl.copyWith(
-                        color: CustomColors.secondary600,
-                      ),
-                    ),
-                    Text(
-                      'Place your clothing within the marks provided. Make sure the item is fully visible, unfolded, and clearly captured.',
-                      style: CustomTextStyles.regularSm.copyWith(
-                        color: CustomColors.secondary400,
-                      ),
-                    ),
-                  ],
-                )),
-            Center(
-              child: Column(
-                children: [
-                  Image.asset(
+                    Transform.translate(
+                    offset: const Offset(0, -32),
+                    child: Image.asset(
                     'assets/images/do upload.png',
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width * 0.9,
-                  ),
-                  Image.asset(
-                    'assets/images/dont upload.png',
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(), // This helps with spacing
-                Padding(
-                padding: const EdgeInsets.only(left: 24, right:24, bottom: 32),
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                  backgroundColor: CustomColors.secondary600,
-                  ),
-                  onPressed: () {},
-                  child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                    Stylomateicon.camera,
-                    color: CustomColors.secondary50,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                    'Take a picture now',
-                    style: CustomTextStyles.mediumLg.copyWith(
-                      color: CustomColors.secondary50,
+                    )),
+                    Transform.translate(
+                    offset: const Offset(0, -68),
+                    child: Image.asset(
+                      'assets/images/dont upload.png',
+                      fit: BoxFit.cover,
+                      width: MediaQuery.of(context).size.width * 0.9,
                     ),
                     ),
                   ],
                   ),
                 ),
-                ),
               ],
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(), // This helps with spacing
+                  Container(
+                    padding:
+                        const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+                    decoration: BoxDecoration(
+                      color: CustomColors.secondary50,
+                    ),
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: CustomColors.secondary600,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/scan-wardrobe');
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Stylomateicon.camera,
+                            color: CustomColors.secondary50,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Take a picture now',
+                            style: CustomTextStyles.mediumLg.copyWith(
+                              color: CustomColors.secondary50,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
