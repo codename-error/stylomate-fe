@@ -6,4 +6,6 @@ class RouteNames {
   static const String previewWardrobe = '/preview-wardrobe';
   static const String doneWardrobe = '/done-wardrobe';
   static const String settings = '/settings';
+  static const String styleMe = '/style-me';
+  static const String tryOn = '/try-on';
 }
