@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:stylomate/services/base_network.dart';
+import 'dart:typed_data';
 
 part 'wardrobe.chopper.dart';
 
@@ -29,5 +30,7 @@ abstract class WardrobeService extends ChopperService {
   Future<Response<dynamic>> getWardrobes();
 
   @Post(path: '/wardrobe/create')
-  Future<Response<dynamic>> addWardrobe(@Body() Map<String, dynamic> body);
+  Future<Response<dynamic>> addWardrobe(
+    @Body() String data
+  );
 }

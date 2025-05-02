@@ -30,7 +30,7 @@ class StyleMeScreenState extends State<StyleMeScreen> {
   bool _isLoading = false;
   WardrobeItem? _selectedTop;
   WardrobeItem? _selectedBottom;
-  int _selectedTabIndex = 1; // Default to Style me tab (middle)
+  int _selectedTabIndex = 1;
   final TextEditingController _searchController = TextEditingController();
   List<WardrobeItem> _items = [];
   List<WardrobeItem> _filteredItems = [];
@@ -193,11 +193,12 @@ class StyleMeScreenState extends State<StyleMeScreen> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    // 3D model background (using PNG)
                     Center(
                       child: Image.asset(
-                        'assets/images/avatar.png',
-                        fit: BoxFit.contain,
+                      'assets/images/avatar.png',
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      fit: BoxFit.cover,
                       ),
                     ),
                     

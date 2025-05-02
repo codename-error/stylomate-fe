@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:stylomate/services/wardrobe.dart';
+import 'dart:io';
+import 'dart:convert';  // Add this import for base64Encode
 import 'package:stylomate/themes/custom_colors.dart';
 import 'package:stylomate/themes/custom_text_styles.dart';
 import 'package:stylomate/themes/custom_icons.dart';
+import 'package:http/http.dart' as http;
 
 class PreviewWardrobeScreen extends StatefulWidget {
   const PreviewWardrobeScreen({super.key});
@@ -11,8 +15,22 @@ class PreviewWardrobeScreen extends StatefulWidget {
 }
 
 class PreviewWardrobeState extends State<PreviewWardrobeScreen> {
-  // Add state variables here
+  final WardrobeService _wardrobeService = WardrobeService.create();
   bool _isUploading = false;
+  Map<String, dynamic> args = {}; // Initialize with empty map
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Move context-dependent code from initState to didChangeDependencies
+    args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ?? {};
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Don't access context here
+  }
 
   // Handle the upload functionality
   Future<void> _handleUpload() async {
@@ -20,18 +38,51 @@ class PreviewWardrobeState extends State<PreviewWardrobeScreen> {
       _isUploading = true;
     });
     
-    // Add your upload logic here
-    // For example: await uploadService.uploadImage(imageFile);
-    
-    // Simulate network delay
-    await Future.delayed(const Duration(seconds: 2));
-    
-    setState(() {
-      _isUploading = false;
-    });
-    
-    Navigator.pushNamed(context, '/done-wardrobe');
-    // You might want to navigate or show a success message after upload
+    try {
+      if (args['imagePath'] == null) {
+        throw Exception('No image file provided');
+      }
+      
+      final String imagePath = args['imagePath'];
+      final File imageFile = File(imagePath);
+      final List<int> fileBytes = await imageFile.readAsBytes();
+      final String base64Image = base64Encode(fileBytes);
+      final String type = args['type']?.toString() ?? 'unknown';
+      final String bodyRequest = jsonEncode({
+        'type': type,
+        'file': base64Image,
+      });
+      
+      final response = await _wardrobeService.addWardrobe(bodyRequest);
+
+      print(bodyRequest);
+      
+      if (mounted) {
+        setState(() {
+          _isUploading = false;
+        });
+        
+        if (response.isSuccessful) {
+          debugPrint('Upload successful');
+          Navigator.pushNamed(context, '/done-wardrobe');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Upload failed: ${response.error ?? "Unknown error"}')),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Upload error: $e');
+      if (mounted) {
+        setState(() {
+          _isUploading = false;
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Upload failed: ${e.toString()}')),
+        );
+      }
+    }
   }
   
   @override
@@ -65,10 +116,12 @@ class PreviewWardrobeState extends State<PreviewWardrobeScreen> {
         children: [
           Expanded(
             child: Center(
-              child: Image.asset(
-                'assets/images/black_shirt.png', // Replace with your image path or network image
-                fit: BoxFit.contain,
-              ),
+              child: args['imagePath'] != null 
+                ? Image.file(
+                    File(args['imagePath']),
+                    fit: BoxFit.contain,
+                  )
+                : const Center(child: Text('No image available')),
             ),
           ),
           Padding(

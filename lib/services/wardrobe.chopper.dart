@@ -27,4 +27,17 @@ final class _$WardrobeService extends WardrobeService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> addWardrobe(String data) {
+    final Uri $url = Uri.parse('/wardrobe/create');
+    final $body = data;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

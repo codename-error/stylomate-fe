@@ -271,7 +271,7 @@ class ScanWardrobeScreenState extends State<ScanWardrobeScreen> {
       if (!mounted) return;
       Navigator.pushNamed(currentContext, '/preview-wardrobe', arguments: {
         'imagePath': photo.path,
-        'category': _selectedCategory == 0 ? 'top' : 'bottom',
+        'type': _selectedCategory == 0 ? 'top' : 'bottom',
       });
     } catch (e) {
       print('Error taking photo: $e');

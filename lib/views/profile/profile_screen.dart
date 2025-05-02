@@ -60,7 +60,6 @@ class ProfileScreenState extends State<ProfileScreen>
       backgroundColor: CustomColors.secondary50,
       body: Stack(
         children: [
-          // Main content
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
