@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stylomate/views/settings/setting_screen.dart';
 import './name_routes.dart';
 import 'package:stylomate/views/home/home_screen.dart';
 import 'package:stylomate/views/profile/profile_screen.dart';
@@ -7,5 +8,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> get routes => {
     RouteNames.home: (context) => HomeScreen(),
     RouteNames.profile: (context) => ProfileScreen(),
+    RouteNames.addWardrobe: (context) => HomeScreen(),
+    RouteNames.settings: (context) => SettingScreen(),
   };
 }

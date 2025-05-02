@@ -58,7 +58,9 @@ class ProfileScreenState extends State<ProfileScreen>
                           padding: const EdgeInsets.all(4),
                           minimumSize: const Size(40, 40),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/settings');
+                        },
                         child: Icon(
                           Stylomateicon.setting,
                           color: CustomColors.secondary400,
