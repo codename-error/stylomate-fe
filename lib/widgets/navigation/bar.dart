@@ -27,12 +27,12 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar> {
     {
       'icon': Stylomateicon.magic,
       'label': 'Try-on',
-      'route': '/',
+      'route': '/try-on',
     },
     {
       'icon': Stylomateicon.camera,
       'label': 'Style me',
-      'route': '/',
+      'route': '/style-me',
     },
     {
       'icon': Stylomateicon.account,

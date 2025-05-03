@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stylomate/services/users.dart';
 import 'package:stylomate/themes/custom_colors.dart';
 import 'package:stylomate/themes/custom_text_styles.dart';
 import 'package:stylomate/themes/custom_icons.dart';
@@ -7,7 +8,6 @@ import 'package:stylomate/views/profile/history_content.dart';
 import 'package:stylomate/widgets/navigation/bar.dart';
 import 'package:stylomate/widgets/user_profile/large.dart';
 import 'package:stylomate/widgets/badge/user.dart';
-
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -18,11 +18,33 @@ class ProfileScreen extends StatefulWidget {
 
 class ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
+  final UsersService _service = UsersService.create();
   late TabController _tabController;
+  String _responseText = "Loading...";
+
+  Future<void> _initializeData() async {
+    try {
+      final response = await _service.getUser();
+      setState(() {
+        if (response != null &&
+            response.body != null &&
+            response.body['message']['username'] != null) {
+          _responseText = response.body['message']['username'];
+        } else {
+          _responseText = "No username found";
+        }
+      });
+    } catch (e) {
+      setState(() {
+        _responseText = "Error loading profile";
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _initializeData();
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -38,7 +60,6 @@ class ProfileScreenState extends State<ProfileScreen>
       backgroundColor: CustomColors.secondary50,
       body: Stack(
         children: [
-          // Main content
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
@@ -58,7 +79,9 @@ class ProfileScreenState extends State<ProfileScreen>
                           padding: const EdgeInsets.all(4),
                           minimumSize: const Size(40, 40),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/settings');
+                        },
                         child: Icon(
                           Stylomateicon.setting,
                           color: CustomColors.secondary400,
@@ -76,7 +99,7 @@ class ProfileScreenState extends State<ProfileScreen>
                         UserProfileLarge(),
                         const SizedBox(height: 16),
                         Text(
-                          'Zidan Amikul',
+                          _responseText,
                           style: CustomTextStyles.medium3xl.copyWith(
                             color: CustomColors.secondary600,
                           ),

@@ -1,13 +1,13 @@
 class HistoryType {
-  final int tokenDecrease;
-  final String imageUrl;
-  final bool isRecommended;
-  final double aspectRatio;
+  final String serviceTitle;
+  final int tokenActivity;
+  final DateTime date;
+  final bool isDecreased;
 
   HistoryType({
-    required this.tokenDecrease,
-    required this.imageUrl,
-    this.isRecommended = false,
-    this.aspectRatio = 1.0,
+    required this.serviceTitle,
+    required this.tokenActivity,
+    required this.date,
+    this.isDecreased = false,
   });
 }

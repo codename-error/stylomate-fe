@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stylomate/themes/custom_colors.dart';
+import 'package:stylomate/themes/custom_icons.dart';
 import 'package:stylomate/themes/custom_text_styles.dart';
+import 'package:stylomate/widgets/popup/delete_wardrobe.dart';
 
 class WardrobeCard extends StatelessWidget {
   final String imgPath;
@@ -22,13 +24,26 @@ class WardrobeCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: AspectRatio(
-                  aspectRatio: 1.0,
-                  child: Image.asset(
-                    imgPath,
-                    fit: BoxFit.cover,
+              child: Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 1.0,
+                    child: Image.asset(
+                      imgPath,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Image.asset(
+                      'assets/images/delete_icon.png',
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
