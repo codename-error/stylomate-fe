@@ -33,4 +33,9 @@ abstract class WardrobeService extends ChopperService {
   Future<Response<dynamic>> addWardrobe(
     @Body() String data
   );
+
+  @Post(path: '/recomendation')
+  Future<Response<dynamic>> getRecommendation(
+    @Body() Map<String, dynamic> data
+  );
 }

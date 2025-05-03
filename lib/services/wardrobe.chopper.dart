@@ -40,4 +40,17 @@ final class _$WardrobeService extends WardrobeService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> getRecommendation(Map<String, dynamic> data) {
+    final Uri $url = Uri.parse('/recomendation');
+    final $body = data;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

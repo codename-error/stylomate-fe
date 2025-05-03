@@ -38,6 +38,11 @@ class StyleMeScreenState extends State<StyleMeScreen> {
       DraggableScrollableController();
   bool _isBottomSheetVisible = false;
   final WardrobeService _wardrobeService = WardrobeService.create();
+  int _idSelectedActiveTop = 0;
+  int _idSelectedActiveBottom = 0;
+  String _targetType = 'None'; // Only use 'None', 'Top', or 'Bottom'
+  String _targetActivity = '';
+  final TextEditingController _activityController = TextEditingController();
 
   @override
   void initState() {
@@ -49,6 +54,7 @@ class StyleMeScreenState extends State<StyleMeScreen> {
   void dispose() {
     _searchController.dispose();
     _draggableController.dispose();
+    _activityController.dispose(); // Dispose activity controller
     super.dispose();
   }
 
@@ -130,6 +136,18 @@ class StyleMeScreenState extends State<StyleMeScreen> {
     });
   }
 
+  // Method to reset outfit
+  void _resetOutfit() {
+    setState(() {
+      _selectedTop = null;
+      _selectedBottom = null;
+      // Reset the targeting variables as well
+      _idSelectedActiveTop = 0;
+      _idSelectedActiveBottom = 0;
+      _targetType = 'None';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,12 +199,12 @@ class StyleMeScreenState extends State<StyleMeScreen> {
                     // Selected top item (if any)
                     if (_selectedTop != null)
                       Positioned(
-                        top: 160,
+                        top: 120,
                         left: 0,
                         right: 0,
                         child: Center(
                           child: SizedBox(
-                            height: 240,
+                            height: 180,
                             child: base64Builder(_selectedTop!.imageUrl),
                           ),
                         ),
@@ -195,12 +213,12 @@ class StyleMeScreenState extends State<StyleMeScreen> {
                     // Selected bottom item (if any)
                     if (_selectedBottom != null)
                       Positioned(
-                        bottom: 130,
+                        bottom: 80,
                         left: 0,
                         right: 0,
                         child: Center(
                           child: SizedBox(
-                            height: 250,
+                            height: 200,
                             child: base64Builder(_selectedBottom!.imageUrl),
                           ),
                         ),
@@ -310,6 +328,39 @@ class StyleMeScreenState extends State<StyleMeScreen> {
                       ),
                     ),
                     
+                    Positioned(
+                      left: 20,
+                      bottom: 100,
+                      child: GestureDetector(
+                        onTap: _resetOutfit,
+                        child: Container(
+                          width: 64,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            color: CustomColors.nd500,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.refresh,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Reset',
+                                style: CustomTextStyles.regularXs.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
                     // Loading indicator
                     if (_isLoading)
                       Container(
@@ -568,28 +619,229 @@ class StyleMeScreenState extends State<StyleMeScreen> {
 
   // Method to handle AI styling
   void _styleWithAI() {
+    // Reset values before showing the dialog
+    _activityController.text = '';
+    
+    // Determine which type is missing
+    if (_selectedTop == null) {
+      _targetType = 'Top'; // Top is missing
+      _idSelectedActiveBottom = _selectedBottom?.id ?? 0;
+    } else if (_selectedBottom == null) {
+      _targetType = 'Bottom'; // Bottom is missing
+      _idSelectedActiveTop = _selectedTop?.id ?? 0;
+    } else {
+      _targetType = 'None'; // Nothing is missing
+      _idSelectedActiveTop = _selectedTop?.id ?? 0;
+      _idSelectedActiveBottom = _selectedBottom?.id ?? 0;
+    }
+
+    // Show the AI styling dialog
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  'Style your day!',
+                  style: CustomTextStyles.semiBoldXl.copyWith(
+                    color: CustomColors.secondary900,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "What's your plan today? Tell us your activity for outfit suggestions.",
+                  style: CustomTextStyles.regularBase.copyWith(
+                    color: CustomColors.secondary700,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 25),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: TextField(
+                    controller: _activityController,
+                    decoration: InputDecoration(
+                      hintText: 'Going to a meeting',
+                      hintStyle: CustomTextStyles.regularLg.copyWith(
+                        color: CustomColors.secondary500,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.all(16),
+                    ),
+                    maxLines: 3,
+                    onChanged: (value) {
+                      _targetActivity = value;
+                    },
+                  ),
+                ),
+                const SizedBox(height: 25),
+                ElevatedButton(
+                  onPressed: () {
+                    _targetActivity = _activityController.text;
+                    Navigator.of(context).pop();
+                    _processAIStyleRequest();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.nd600,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 12,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.auto_awesome,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Generate',
+                        style: CustomTextStyles.semiBoldLg.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Process the AI style request after dialog is closed
+  void _processAIStyleRequest() {
     setState(() {
       _isLoading = true;
     });
 
-    // Simulate API call or processing
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    // Prepare the request data according to the specified schema
+    final Map<String, dynamic> requestData = {
+      'id': _targetType == 'Top' ? _idSelectedActiveBottom : 
+            _targetType == 'Bottom' ? _idSelectedActiveTop : 0,
+      'cari': _targetType,
+      'activity': _targetActivity,
+    };
+
+    debugPrint('Sending recommendation request with data: $requestData');
+    
+    // Call the API
+    _wardrobeService.getRecommendation(requestData).then((response) {
       setState(() {
         _isLoading = false;
-
-        // AI would ideally pick a suitable combination
-        // For this example, just select the first items
-        final tops = _items.where((item) => item.type == 'top').toList();
-        final bottoms = _items.where((item) => item.type == 'bottom').toList();
-
-        if (tops.isNotEmpty) {
-          _selectedTop = tops[0];
-        }
-
-        if (bottoms.isNotEmpty) {
-          _selectedBottom = bottoms[0];
+        
+        if (response.isSuccessful && response.body != null) {
+          final responseData = response.body;
+          debugPrint('Recommendation response: $responseData');
+          
+          // Check if response is successful and has data
+          if (responseData['status'] == 'success' && 
+              responseData['data'] != null && 
+              responseData['data']['data'] != null) {
+            
+            final responseItems = responseData['data']['data'];
+            
+            // Process the recommendation response
+            if (_targetType == 'Top' && responseItems['top'] != null && responseItems['top'].isNotEmpty) {
+              final recommendedTopItem = responseItems['top'][0];
+              _selectedTop = WardrobeItem(
+                id: recommendedTopItem['id'] ?? 0, 
+                imageUrl: recommendedTopItem['image_url'] ?? '', 
+                type: 'top'
+              );
+              debugPrint('Selected Top: ${_selectedTop!.id}');
+            }
+            
+            if (_targetType == 'Bottom' && responseItems['bottom'] != null && responseItems['bottom'].isNotEmpty) {
+              final recommendedBottomItem = responseItems['bottom'][0];
+              _selectedBottom = WardrobeItem(
+                id: recommendedBottomItem['id'] ?? 0, 
+                imageUrl: recommendedBottomItem['image_url'] ?? '', 
+                type: 'bottom'
+              );
+              debugPrint('Selected Bottom: ${_selectedBottom!.id}');
+            }
+            
+            if (_targetType == 'None') {
+              if (responseItems['top'] != null && responseItems['top'].isNotEmpty) {
+                final recommendedTopItem = responseItems['top'][0];
+                _selectedTop = WardrobeItem(
+                  id: recommendedTopItem['id'] ?? 0, 
+                  imageUrl: recommendedTopItem['image_url'] ?? '', 
+                  type: 'top'
+                );
+              }
+              
+              if (responseItems['bottom'] != null && responseItems['bottom'].isNotEmpty) {
+                final recommendedBottomItem = responseItems['bottom'][0];
+                _selectedBottom = WardrobeItem(
+                  id: recommendedBottomItem['id'] ?? 0, 
+                  imageUrl: recommendedBottomItem['image_url'] ?? '', 
+                  type: 'bottom'
+                );
+              }
+            }
+          } else {
+            debugPrint('Invalid response format: ${response.body}');
+            _fallbackToRandomSelection();
+          }
+        } else {
+          debugPrint('Failed to get recommendation: ${response.error}');
+          _fallbackToRandomSelection();
         }
       });
+    }).catchError((e) {
+      debugPrint('Error getting recommendation: $e');
+      setState(() {
+        _isLoading = false;
+        _fallbackToRandomSelection();
+      });
     });
+  }
+
+  // Fallback method if API fails
+  void _fallbackToRandomSelection() {
+    final tops = _items.where((item) => item.type == 'top').toList();
+    final bottoms = _items.where((item) => item.type == 'bottom').toList();
+
+    if (_targetType == 'Top' || _targetType == 'None') {
+      if (tops.isNotEmpty) {
+        _selectedTop = tops[DateTime.now().millisecond % tops.length];
+      }
+    }
+
+    if (_targetType == 'Bottom' || _targetType == 'None') {
+      if (bottoms.isNotEmpty) {
+        _selectedBottom = bottoms[DateTime.now().millisecond % bottoms.length];
+      }
+    }
   }
 }
