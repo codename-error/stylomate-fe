@@ -1,4 +1,4 @@
 abstract class BaseNetwork {
-  static const String baseUrl = 'https://991c-202-158-77-58.ngrok-free.app/v2';
-  static const String sampleToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJOaXMyeUNnR1hzWlFTbWJWNzNwejdyWXBJOUUyIiwiZXhwIjoxNzQ2ODEyODM1fQ._jYhI6NRzsuPLzu0pgFRH3O1qN_jchSlrKD0vP1E2Pk';
+  static const String baseUrl = 'https://stylomate-be-production.up.railway.app/v2';
+  static const String sampleToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJOaXMyeUNnR1hzWlFTbWJWNzNwejdyWXBJOUUyIiwiZXhwIjoxNzQ2ODU3Njk2fQ.Xpvc6Ms31fuR-vgrg7PCkShydY1doCtbbvAonRP0ElE';
 }

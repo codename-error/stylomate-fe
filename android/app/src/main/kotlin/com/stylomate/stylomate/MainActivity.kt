@@ -1,4 +1,4 @@
-package com.example.stylomate
+package com.stylomate.stylomate
 
 import io.flutter.embedding.android.FlutterActivity
 

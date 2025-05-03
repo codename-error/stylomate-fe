@@ -38,7 +38,10 @@ final class _$WardrobeService extends WardrobeService {
       client.baseUrl,
       body: $body,
     );
-    return client.send<dynamic, dynamic>($request);
+    return client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: FormUrlEncodedConverter.requestFactory,
+    );
   }
 
   @override

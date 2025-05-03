@@ -13,34 +13,34 @@ class SettingScreen extends StatefulWidget {
 }
 
 class SettingScreenState extends State<SettingScreen> {
-  final TestService _service = TestService.create();
-  final WardrobeService _wardrobeService = WardrobeService.create();
-  String _responseText = "Loading...";
-  bool _isLoading = true;
+  // final TestService _service = TestService.create();
+  // final WardrobeService _wardrobeService = WardrobeService.create();
+  // String _responseText = "Loading...";
+  // bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _initializeData();
+    // _initializeData();
   }
 
-  Future<void> _initializeData() async {
-    try {
-      final response = await _service.getPing();
-      final wardrobeResponse = await _wardrobeService.getWardrobes();
-      setState(() {
-        _responseText = response.isSuccessful && wardrobeResponse.isSuccessful
-            ? "Ping successful: ${response.body} and ${wardrobeResponse.body}"
-            : "Error: ${response.error} (${response.statusCode}) and ${wardrobeResponse.error} (${wardrobeResponse.headers})";
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _responseText = "Exception occurred: $e";
-        _isLoading = false;
-      });
-    }
-  }
+  // Future<void> _initializeData() async {
+  //   try {
+  //     final response = await _service.getPing();
+  //     final wardrobeResponse = await _wardrobeService.getWardrobes();
+  //     setState(() {
+  //       _responseText = response.isSuccessful && wardrobeResponse.isSuccessful
+  //           ? "Ping successful: ${response.body} and ${wardrobeResponse.body}"
+  //           : "Error: ${response.error} (${response.statusCode}) and ${wardrobeResponse.error} (${wardrobeResponse.headers})";
+  //       _isLoading = false;
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       _responseText = "Exception occurred: $e";
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -149,21 +149,21 @@ class SettingScreenState extends State<SettingScreen> {
                 ],
                 )),
             ),
-           _isLoading 
-                ? const CircularProgressIndicator()
-                : Container(
-                    padding: const EdgeInsets.all(16),
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      _responseText,
-                      style: CustomTextStyles.regularSm.copyWith(
-                        color: CustomColors.secondary900,
-                      ),
-                    ),
-                  ),
+          //  _isLoading 
+          //       ? const CircularProgressIndicator()
+          //       : Container(
+          //           padding: const EdgeInsets.all(16),
+          //           margin: const EdgeInsets.symmetric(horizontal: 20),
+          //           decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(8),
+          //           ),
+          //           child: Text(
+          //             _responseText,
+          //             style: CustomTextStyles.regularSm.copyWith(
+          //               color: CustomColors.secondary900,
+          //             ),
+          //           ),
+          //         ),
           ],
         ));
   }
